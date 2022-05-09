@@ -23,6 +23,8 @@ UP = 2
 DOWN = 3
 Px= 200 #xpos of player
 Py= 200 #ypos of player
+score = 0
+score2 = 0
 vx = 0 #x velocity of player
 vy = 0 #y velocity of player
 keys = [False, False, False, False] #this list holds whether each key has been pressed
@@ -31,7 +33,6 @@ frameWidth = 50
 frameHeight = 50
 RowNum = 0
 frameNum = 0
-
 def CircleCollision(x1,x2,y1,y2, radius):
     if (math.sqrt((x2 - x1)**2 + (y2- y1)**2))<radius:
         return True
@@ -135,15 +136,19 @@ while not gameover: #GAME LOOP##################################################
     
     #try to call the function here, use the new variables
     #(put the call inside an if statement, and only get new points for the circle when it's clicked on)
-    if CircleCollision(num,mousePos[0], mousePos[1],num1, s)==True:
+    if CircleCollision(num,Px, Py,num1, s)==True:
+        
         num = random.randrange(1, 800)
         num1 = random.randrange(1, 800)
         c1 = random.randrange(1, 255)
         c2 = random.randrange(1, 255)
         c3 = random.randrange(1, 255)
         s = random.randrange(10, 21)
-        
-        
+
+        frameNum += 1
+        score += 1
+        score2 += 1
+
     if Px < 0:
         Px=999
     if Px > 999:
@@ -152,18 +157,19 @@ while not gameover: #GAME LOOP##################################################
         Py=999
     if Py > 999:
         Py=0
-    
-   
     #Render Section ---------------------------
     screen.fill((0,0,255))
     screen.blit(Back, (0,0), (0,0,1000,1000))
-
+    font = pygame.font.Font(None, 74)
+    text = font.render(str(score),1, (0, 255, 0))
+    text2 = font.render(str(score),1, (0,255,0))
+    screen.blit(text2, (750, 10)) 
+    screen.blit(text, (250, 10))
     screen.blit(fishy,(num, num1,25,25))
-    
     screen.blit(Eel, (Px, Py), (frameWidth*frameNum, RowNum*frameHeight, frameWidth, frameHeight))    
 
-    pygame.draw.rect(screen, (red), (Px,Py,25,25))
 
     pygame.display.flip()
 
 pygame.quit()
+
