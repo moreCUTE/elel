@@ -2,7 +2,7 @@ import pygame
 import random
 import math
 pygame.init()  
-pygame.display.set_caption("platformer")  # sets the window title
+pygame.display.set_caption("ell")  # sets the window title
 screen = pygame.display.set_mode((1000, 1000))  # creates game screen
 screen.fill((0,0,0))
 clock = pygame.time.Clock() #set up clock
@@ -11,7 +11,9 @@ red = (255,0,0)
 
 
 Eel = pygame.image.load('eelface.png') #load your spritesheet
+Eel2 = pygame.image.load('eelface2.png')
 Eel.set_colorkey((255,255,255)) #this makes bright pink (255, 0, 255) transparent (sort of)
+Eel2.set_colorkey((255,255,255)) #this makes bright pink (255, 0, 255) transparent (sort of)
 fishy = pygame.image.load('fishy.png')
 fishy.set_colorkey((255,255,255))
 Back = pygame.image.load('background.png')
@@ -21,14 +23,20 @@ LEFT=0
 RIGHT=1
 UP = 2
 DOWN = 3
-Px= 200 #xpos of player
-Py= 200 #ypos of player
+Px= 600 #xpos of player
+Py= 700 #ypos of player
+Px2= 400
+Py2= 700 
+vx = 0 #x velocity of player
+vy = 0 #y velocity of player
+vx2 = 0
+vy2 = 0
 score = 0
 score2 = 0
 vx = 0 #x velocity of player
 vy = 0 #y velocity of player
 keys = [False, False, False, False] #this list holds whether each key has been pressed
-
+second = [False, False, False, False]
 frameWidth = 50
 frameHeight = 50
 RowNum = 0
@@ -64,75 +72,97 @@ while not gameover: #GAME LOOP##################################################
             gameover = True
       
         if event.type == pygame.KEYDOWN: #keyboard input
-            if event.key == pygame.K_a:
+            if event.key == pygame.K_LEFT:
                 keys[LEFT]=True
-            elif event.key == pygame.K_d:
+            elif event.key == pygame.K_RIGHT:
                 keys[RIGHT]=True
-            elif event.key == pygame.K_w:
+            elif event.key == pygame.K_UP:
                 keys[UP]=True
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_DOWN:
                 keys[DOWN]=True
+            if event.key == pygame.K_a:
+                second[LEFT]=True
+            elif event.key == pygame.K_d:
+                second[RIGHT]=True
+            elif event.key == pygame.K_w:
+                second[UP]=True
+            elif event.key == pygame.K_s:
+                second[DOWN]=True
            
         if event.type == pygame.KEYUP: #keyboard input
-            if event.key == pygame.K_a:
+            if event.key == pygame.K_LEFT:
                 keys[LEFT]=False
-            elif event.key == pygame.K_d:
+            elif event.key == pygame.K_RIGHT:
                 keys[RIGHT]=False
-            elif event.key == pygame.K_w:
+            elif event.key == pygame.K_UP:
                 keys[UP]=False
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_DOWN:
                 keys[DOWN]=False
+            if event.key == pygame.K_a:
+                second[LEFT]=False
+            elif event.key == pygame.K_d:
+                second[RIGHT]=False
+            elif event.key == pygame.K_w:
+                second[UP]=False
+            elif event.key == pygame.K_s:
+                second[DOWN]=False
                 
-    if event.type == pygame.MOUSEBUTTONDOWN:#CLICK
-        mousePos = event.pos
-
-    if event.type == pygame.MOUSEBUTTONUP:#release
-        draw = False
-
-    if event.type == pygame.MOUSEMOTION:
-        mousePos = event.pos
-       
-    if event.type == pygame.QUIT: #close game window
-        break        
- 
-    #physics/movement section#LEFT MOVEMENT
+    
+    
+    #physics section--------------------------------------------------------------------
+    
+    #LEFT MOVEMENT
     if keys[LEFT]==True:
         vx=-3
         vy=0
-        RowNum = 2
-        frameNum = 0
         direction = LEFT
         
+    #Right Movement
     elif keys[RIGHT]==True:
         vx=3
         vy=0
-        RowNum = 0
-        frameNum = 0
         direction = RIGHT
     
-
-        
       #JUMPING  
     if keys[UP]==True:
         vy=-3
         vx=0
-        RowNum = 1
-        frameNum = 0
         direction = UP
-
         
       #DOWN
-    elif keys[DOWN]==True:
-        vy = 3
+    if keys[DOWN]==True:
+        vy=+3
         vx=0
-        RowNum = 3
-        frameNum = 0
         direction = DOWN
     
-
-    #update player position
+    #LEFT MOVEMENT
+    if second[LEFT]==True:
+        vx2=-3
+        vy2=0
+        direction2 = LEFT
+        
+    #Right Movement
+    elif second[RIGHT]==True:
+        vx2=3
+        vy2=0
+        direction2 = RIGHT
+    
+      #JUMPING  
+    if second[UP]==True:
+        vy2=-3
+        vx2=0
+        direction2 = UP
+        
+      #DOWN
+    if second[DOWN]==True:
+        vy2=+3
+        vx2=0
+        direction2 = DOWN
+        
     Px+=vx 
     Py+=vy
+    Px2+=vx2
+    Py2+=vy2
     
     #try to call the function here, use the new variables
     #(put the call inside an if statement, and only get new points for the circle when it's clicked on)
@@ -166,10 +196,10 @@ while not gameover: #GAME LOOP##################################################
     screen.blit(text2, (750, 10)) 
     screen.blit(text, (250, 10))
     screen.blit(fishy,(num, num1,25,25))
-    screen.blit(Eel, (Px, Py), (frameWidth*frameNum, RowNum*frameHeight, frameWidth, frameHeight))    
-
+    screen.blit(Eel, (Px, Py), (frameWidth*frameNum, RowNum*frameHeight, frameWidth, frameHeight))
+    screen.blit(Eel2, (Px2, Py2), (frameWidth*frameNum, RowNum*frameHeight, frameWidth, frameHeight))   
+  
 
     pygame.display.flip()
 
 pygame.quit()
-
